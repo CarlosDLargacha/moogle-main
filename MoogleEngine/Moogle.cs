@@ -1,6 +1,5 @@
-﻿//Pedro Dennis Perez Marquez C121
+﻿//Carlos Daniel Largacha Leal C-112
 namespace MoogleEngine;
-
 
 public static class Moogle
 {
