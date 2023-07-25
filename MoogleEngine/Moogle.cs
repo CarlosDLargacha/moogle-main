@@ -52,7 +52,6 @@ public static class Moogle
                     {
                         if (signos[j] == '*')
                         {
-                            Console.WriteLine("ES LAPINGA");
                             presencia[Datos.WordValue[TempWord1]] *= 100;
                         }
                         if (signos[j] == '!')
