@@ -2,7 +2,7 @@
 # Funcion: Ejecutar el proyecto 
 run() {
     echo "Ejecutando el proyecto ..."
-    dotnet watch run --project MoogleServer
+    dotnet watch run --project Moogle
 }
 #Funcion: Compilar y generar el PDF del informe
 report(){
