@@ -1,97 +1,102 @@
 #!/bin/bash
 
+# Función para regresar al directorio Script
+regresar_a_script() {
+  cd "$(dirname "$0")"
+}
+
+# Función para compilar Moogle!
+compilar_proyecto() {
+  cd ..
+  dotnet watch run --project MoogleServer
+  regresar_a_script
+}
+
+# Función para compilar y generar el PDF del informe
+compilar_informe() {
+  cd ..
+  cd Informe
+  latexmk -pdf informe.tex
+  regresar_a_script
+}
+
+# Función para compilar y generar el PDF de la presentación
+compilar_presentacion() {
+  cd ..
+  cd Presentación
+  latexmk -pdf presentacion.tex
+  regresar_a_script
+}
+
+# Función para mostrar el informe
+mostrar_informe() {
+  if [ ! -f ../Informe/informe.pdf ]; then
+    compilar_informe
+  fi
+  if [ $# -eq 0 ]; then
+    start ../Informe/informe.pdf
+  else
+    "$@" ../Informe/informe.pdf
+  fi
+}
+
+# Función para mostrar la presentación
+mostrar_presentacion() {
+  if [ ! -f ../Presentación/presentacion.pdf ]; then
+    compilar_presentacion
+  fi
+  if [ $# -eq 0 ]; then
+    start ../Presentación/presentacion.pdf
+  else
+    "$@" ../Presentación/presentacion.pdf
+  fi
+}
+
+# Función para limpiar los archivos auxiliares
+limpiar_archivos_auxiliares() {
+  cd ../Informe
+  latexmk -c
+  cd ../Presentación
+  latexmk -c
+  cd ../..
+  regresar_a_script
+}
+
+# Menú principal
 while true; do
-    clear
-    echo -e "\e[34m Select a number \e[0m"
-    echo 
-    echo " 1-run"
-    echo " 2-report"
-    echo " 3-slides"
-    echo " 4-show_report"
-    echo " 5-show_slides"
-    echo " 6-clean"
-    echo " 7-quit" 
-
-run() {
-    echo -e "\e[34m Run Moogle \e[0m"
-    cd ..
-    cd Moogle-main-
-    dotnet watch run --project MoogleServer
-    echo "Press Enter to continue" 
-    read
-}
-
-report() {
-    echo -e "\e[34m Running Report \e[0m"
-    cd .. 
-    cd Informe
-    latexmk -pdf Informe.tex
-    echo "Press Enter to continue"
-    read
-}
-
-slides() {
-    echo -e "\e[34m Running Slide \e[0m"
-    cd ..
-    cd Presentacion
-    latexmk -pdf Presentacion.tex
-    echo "Press Enter to continue"
-    read
-}
-
-show_report() {
-    echo -e "\e[34m Showing Report \e[0m"
-    cd ..
-    cd Informe
-    xdg-open Informe.pdf
-    echo "Press Enter to continue"
-    read
-}
-
-show_slides() {
-    echo -e "\e[34m Showing Slides \e[0m"
-    cd ..
-    cd Presentacion
-    xdg-open Presentacion.pdf
-    echo "Press Enter to continue"
-    read
-}
-clean() {
-    echo -e "\e[34m Cleaning files \e[0m"
-    cd ..
-    cd Informe
-    rm Informe.aux Informe.fdb_latexmk Informe.fls Informe.log Informe.pdf Informe.toc
-    cd ..
-    cd Presentacion
-    rm Presentacion.aux Presentacion.fdb_latexmk Presentacion.fls Presentacion.log Presentacion.nav Presentacion.snm Presentacion.vrb Presentacion.toc Presentacion.pdf
-    cd sections 
-    rm basics.aux intro.aux structure.aux conclusion.aux
-    echo "Press Enter to continue"
-    read
-}
-read option
-    case $option in
-        "1")
-            run
-            ;;
-        "2")
-            report
-            ;;
-        "3")
-            slides
-            ;;
-        "4")
-            show_report "report.pdf" 
-            ;;
-        "5")
-            show_slides "slides.pdf" 
-            ;;
-        "6")
-            clean
-            ;;
-        "7")
-            echo -e "\e[34m Closing \e[0m"
-            break
-            ;;
-    esac
+  echo "Selecciona una opción:"
+  echo "1. Ejecutar el proyecto"
+  echo "2. Compilar y generar el informe"
+  echo "3. Compilar y generar la presentación"
+  echo "4. Mostrar el informe"
+  echo "5. Mostrar la presentación"
+  echo "6. Limpiar archivos auxiliares"
+  echo "7. Salir"
+  read opcion
+  case $opcion in
+    1)
+      compilar_proyecto
+      ;;
+    2)
+      compilar_informe
+      ;;
+    3)
+      compilar_presentacion
+      ;;
+    4)
+      mostrar_informe "$@"
+      ;;
+    5)
+      mostrar_presentacion "$@"
+      ;;
+    6)
+      limpiar_archivos_auxiliares
+      ;;
+    7)
+      exit
+      ;;
+    *)
+      echo "Opción inválida"
+      ;;
+  esac
 done
