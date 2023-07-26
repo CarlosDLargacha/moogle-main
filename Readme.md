@@ -14,4 +14,4 @@ La aplicación está dividida en dos componentes fundamentales:
 - `MoogleServer` es un servidor web que renderiza la interfaz gráfica y sirve los resultados.
 - `MoogleEngine` es una biblioteca de clases donde está implementada la lógica del algoritmo de búsqueda.
 
-Mas detalles en CarlosD Informe Final.pdf
+Mas detalles en informe.tex
